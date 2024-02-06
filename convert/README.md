@@ -3,11 +3,12 @@
 Currently script extracts these fields:
 
 - `ipv` - IP version
-- `proto` - transport protocol
 - `src` - source IP address
 - `dst` - destination IP address
 - `srcport` - source port
 - `dstport` - destination port
+- `length` - length (in bytes)
+- `proto` - transport protocol
 
 TODO: decide what other fields we need to extract for further training of the model.
 
