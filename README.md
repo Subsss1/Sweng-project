@@ -1,5 +1,6 @@
 Software Engineering Project 2024
 Group 11
+
 Client: Pico
 
 Project Description:
@@ -9,15 +10,15 @@ The dissector will then utilise these models to classify captured packets or flo
 The end goal is to enhance network analysis by distinguishing between human and automated traffic patterns.
 
 Members:
-Colm Buttimer
-Fifi Onafuwa
-Rhys Mac Giollabhuidhe
-Xingqiao Xu
-Yuheng Ye
-Rosemary Doyle
-Daniel Sorensen
-Alexander Judge
-Jesse Chambers
-Eoin Bande
+Colm Buttimer,
+Fifi Onafuwa,
+Rhys Mac Giollabhuidhe,
+Xingqiao Xu,
+Yuheng Ye,
+Rosemary Doyle,
+Daniel Sorensen,
+Alexander Judge,
+Jesse Chambers,
+Eoin Bande,
 Andri Yupyk 
 
