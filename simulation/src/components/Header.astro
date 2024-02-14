@@ -1,0 +1,41 @@
+<header>
+  <a href="/" class="logo">Dummy Site</a>
+
+  <nav>
+    <a href="/gallery">Gallery</a>
+    <a href="/video">Video</a>
+    <a href="/about">About Us</a>
+  </nav>
+</header>
+
+<style>
+  header {
+    width: 100%;
+    padding: 1.5rem max(5%, 1.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222222;
+    color: white;
+  }
+
+  .logo {
+    all: unset;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+  }
+  nav a {
+    all: unset;
+    cursor: pointer;
+    transition: opacity 0.25s;
+  }
+  nav a:hover {
+    opacity: 0.75;
+  }
+</style>
