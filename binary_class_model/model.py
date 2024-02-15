@@ -8,19 +8,19 @@ def load_dummy_data():
     with open(r'dummy_data.csv') as csv_file:
         data_reader = csv.reader(csv_file)
         #print(data_reader)
-        properties = next(data_reader)[:6]
+        properties = next(data_reader)[:7]
         #print(properties)
         data = []
         author = []
         for row in data_reader:
             #print(row)
-            stats = row[:6]
+            stats = row[:7]
             #print(features)
-            lable = row[6] #index to whichever column indicates machine/human generated
+            label = row[7] #index to whichever column indicates machine/human generated
             #print(label)
             data.append([float(num) for num in stats])
             #print(data)
-            author.append(int(lable))
+            author.append(float(label))
             #print(author)
 
         data = np.array(data)
