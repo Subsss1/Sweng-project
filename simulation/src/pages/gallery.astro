@@ -3,7 +3,34 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Gallery">
-  <p>gallery</p>
+  <h2>Gallery</h2>
+
+  <section class="gatos">
+    <h3>Los Gatos</h3>
+    <div class="grid">
+      <img src="/assets/cats/1.jpeg" alt="El Gato 1" />
+      <img src="/assets/cats/2.jpeg" alt="El Gato 2" />
+      <img src="/assets/cats/3.jpeg" alt="El Gato 3" />
+      <img src="/assets/cats/4.jpeg" alt="El Gato 4" />
+      <img src="/assets/cats/5.jpeg" alt="El Gato 5" />
+      <img src="/assets/cats/6.jpeg" alt="El Gato 6" />
+    </div>
+  </section>
 </Layout>
 
-<style></style>
+<style>
+  .gatos > .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .gatos > .grid > img {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 0.5rem;
+  }
+</style>

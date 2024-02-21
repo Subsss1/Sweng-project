@@ -5,6 +5,7 @@ COPY ./tsconfig.json ./
 COPY ./astro.config.mjs ./
 RUN npm ci
 COPY ./src src
+COPY ./public public
 RUN npm run build
 
 FROM nginx:alpine
