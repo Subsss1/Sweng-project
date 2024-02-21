@@ -7,7 +7,6 @@ Based on:
 @author: liutao from https://www.linkedin.com/pulse/build-machine-learning-model-network-flow-tao-liu
 """
 from functools import reduce
-
 import pandas as pd
 import sys
 import re
@@ -29,12 +28,14 @@ file1.isnull().sum
 # step-1 to replace all empty/null to be empty
 update_file = file1.fillna(" ")
 update_file.isnull().sum()
-update_file.to_csv('update_'+filename, index = False)
+update_file.to_csv('update_'+filename, index=False)
 
 # step-2 to remove all rows with empty value
 update_file = file1.fillna(0)
 print(update_file.isnull().sum())
-#update_file['tcp.flags'] = update_file['tcp.flags'].apply(lambda  x: int(str(x), 16))
-update_file['Source']=update_file['Source'].apply(lambda x: from_string(x))
-update_file['Destination']=update_file['Destination'].apply(lambda x: from_string(x))
-update_file.to_csv('update_'+filename, index = False)
+# Encode the 'protocol' column (assuming 'protocol' is the column to encode)
+protocol_encoder = {'TCP': 0, 'UDP': 1}
+update_file['protocol_encoded'] = update_file['protocol'].map(protocol_encoder)
+update_file['Source'] = update_file['Source'].apply(lambda x: from_string(x))
+update_file['Destination'] = update_file['Destination'].apply(lambda x: from_string(x))
+update_file.to_csv('update_'+filename, index=False)
