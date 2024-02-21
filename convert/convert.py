@@ -7,7 +7,7 @@ output_path = './output.csv'
 header = ['ipv', 'src', 'dst', 'srcport', 'dstport', 'length', 'proto']
 
 with open(output_path, 'w') as output:
-  capture = pyshark.FileCapture(input_path, display_filter='tcp or udp')
+  capture = pyshark.FileCapture('./convert/example.pcapng', display_filter='tcp or udp')
   writer = csv.writer(output)
   writer.writerow(header)
 
