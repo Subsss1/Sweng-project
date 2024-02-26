@@ -35,7 +35,9 @@ DissectorTable.get("udp.port"):add(1900, ismachine_protocol)
 
 -- Helpers
 function infer(args)
-  local command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
+  local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
+  local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
+  local command = package.config:sub(1,1) == "\\" and windows_command or unix_command
   local command_args = " " .. table.concat(args, " ")
   local handle = io.popen(command .. command_args, "r")
   local output = handle:read("*a")
