@@ -25,7 +25,7 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   local proto = tostring(proto_num)
   local len = tostring(pinfo.len)
 
-  local args = { ipv, proto, src, dst, src_port, dst_port, len }
+  local args = { ipv, src, dst, src_port, dst_port, proto, len }
   print(dump(args))
 
   -- Get inference result
