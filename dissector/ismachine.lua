@@ -7,10 +7,28 @@ cached_result = {}
 
 function ismachine_protocol.dissector(buffer, pinfo, tree)
   -- Set name in protocol column
-  pinfo.cols.protocol = ismachine_protocol.name
+  -- pinfo.cols.protocol = ismachine_protocol.name
 
+  -- Filter out
+  local packet_type = buffer(12, 2):uint()
+  local proto_num = buffer(23, 1):uint()
+  local is_ip = packet_type == 2048 or packet_type == 34525
+  local is_udp_or_tcp = proto_num == 6 or proto_num == 17
+  if(not is_ip and not is_udp_or_tcp) then
+    return
+  end
+  
   -- Get packet info
-  local args = {}
+  local ipv = tostring(packet_type == 2048 and 4 or 6)
+  local proto = tostring(proto_num)
+  local src_address = tostring(pinfo.src)
+  local dst_address = tostring(pinfo.dst)
+  local src_port = tostring(pinfo.src_port)
+  local dst_port = tostring(pinfo.dst_port)
+  local len = tostring(pinfo.len)
+  
+  local args = { ipv, proto, src_address, dst_address, src_port, dst_port, len }
+  print(dump(args))
 
   -- Get inference result
   local result = cached_result[pinfo.number]
@@ -30,10 +48,10 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   subtree:add(ismachine_protocol.fields.probability, probability)
 end
 
-DissectorTable.get("tcp.port"):add(80, ismachine_protocol)
-DissectorTable.get("udp.port"):add(1900, ismachine_protocol)
+register_postdissector(ismachine_protocol)
 
 -- Helpers
+
 function infer(args)
   local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
   local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
@@ -51,5 +69,18 @@ function remove_last_line(str)
     return str:sub(1, last_line_index - 1)
   else
     return ""
+  end
+end
+
+function dump(o)
+  if type(o) == 'table' then
+     local s = '{ '
+     for k,v in pairs(o) do
+        if type(k) ~= 'number' then k = '"'..k..'"' end
+        s = s .. '['..k..'] = ' .. dump(v) .. ','
+     end
+     return s .. '} '
+  else
+     return tostring(o)
   end
 end
