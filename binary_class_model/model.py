@@ -1,3 +1,4 @@
+import joblib
 from sklearn.utils import Bunch
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
@@ -57,4 +58,5 @@ test_results = gauss.predict(testing_data)
 print(test_results)
 
 score = accuracy_score(testing_labels,test_results)
+joblib.dump(model, 'model.pkl')
 print("score: ", score)
