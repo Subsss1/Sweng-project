@@ -7,7 +7,6 @@ import random
 arguments = sys.argv[1:]
 
 # Some magical stuff with model (run inference using arguments)
-# time.sleep(1) # Simulate heavy work
 result = random.uniform(0, 1)
 
 # Return result

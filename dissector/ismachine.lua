@@ -6,41 +6,19 @@ ismachine_protocol.fields.probability = ProtoField.string("ismachine.probability
 cached_result = {}
 
 function ismachine_protocol.dissector(buffer, pinfo, tree)
-  -- Set name in protocol column
-  -- pinfo.cols.protocol = ismachine_protocol.name
+  -- Set name in "Protocol" column
+  pinfo.cols.protocol = ismachine_protocol.name
 
-  -- Filter out
-  local packet_type = buffer(12, 2):uint()
-  local proto_num = buffer(23, 1):uint()
-  local is_ip = packet_type == 2048 or packet_type == 34525
-  local is_udp_or_tcp = proto_num == 6 or proto_num == 17
-  if(not is_ip and not is_udp_or_tcp) then
-    return
-  end
-  
+  -- Add subtree in packet info
+  local subtree = tree:add(ismachine_protocol, buffer(), "IsMachine Protocol Data")
+
   -- Get packet info
-  local ipv = tostring(packet_type == 2048 and 4 or 6)
-  local proto = tostring(proto_num)
-  local src_address = tostring(pinfo.src)
-  local dst_address = tostring(pinfo.dst)
-  local src_port = tostring(pinfo.src_port)
-  local dst_port = tostring(pinfo.dst_port)
-  local len = tostring(pinfo.len)
-  
-  local args = { ipv, proto, src_address, dst_address, src_port, dst_port, len }
-  print(dump(args))
+  local args = {} 
 
-  -- Get inference result
-  local result = cached_result[pinfo.number]
-  if not result then
-    result = infer(args)
-    cached_result[pinfo.number] = result
-  end
-
-  -- Get fields
-  local machine_generated_probability = tonumber(result)
-  local generated_by = machine_generated_probability >= 0.5 and "Machine" or "Human"
-  local probability = machine_generated_probability >= 0.5 and machine_generated_probability or 1 - machine_generated_probability
+  -- Execute model
+  local inference_output = infer(args)
+  local is_machine_generated_probability = inference_output
+  local is_machine_generated = tonumber(is_machine_generated_probability) >= 0.5
 
   -- Add subtree
   local subtree = tree:add(ismachine_protocol, buffer(), "IsMachine Protocol Data")
@@ -48,23 +26,23 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   subtree:add(ismachine_protocol.fields.probability, probability)
 end
 
-register_postdissector(ismachine_protocol)
+local udp_table = DissectorTable.get("udp.port")
+udp_table:add(1900, ismachine_protocol)
 
--- Helpers
-
+----- Helpers -----
 function infer(args)
-  local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
-  local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
-  local command = package.config:sub(1,1) == "\\" and windows_command or unix_command
-  local command_args = " " .. table.concat(args, " ")
-  local handle = io.popen(command .. command_args, "r")
+  local command = "python3 ~/.local/lib/wireshark/plugins/inference.py " .. table.concat(args, " ")
+  print(command)
+  local handle = io.popen(command,"r")
   local output = handle:read("*a")
   handle:close()
+
   return remove_last_line(output)
 end
 
 function remove_last_line(str)
   local last_line_index = str:find("\n[^\n]*$")
+
   if last_line_index then
     return str:sub(1, last_line_index - 1)
   else
@@ -72,15 +50,23 @@ function remove_last_line(str)
   end
 end
 
-function dump(o)
-  if type(o) == 'table' then
-     local s = '{ '
-     for k,v in pairs(o) do
-        if type(k) ~= 'number' then k = '"'..k..'"' end
-        s = s .. '['..k..'] = ' .. dump(v) .. ','
-     end
-     return s .. '} '
+----- Helpers -----
+function infer(args)
+  local command = "python3 ~/.local/lib/wireshark/plugins/inference.py " .. table.concat(args, " ")
+  print(command)
+  local handle = io.popen(command,"r")
+  local output = handle:read("*a")
+  handle:close()
+
+  return remove_last_line(output)
+end
+
+function remove_last_line(str)
+  local last_line_index = str:find("\n[^\n]*$")
+
+  if last_line_index then
+    return str:sub(1, last_line_index - 1)
   else
-     return tostring(o)
+    return ""
   end
 end
