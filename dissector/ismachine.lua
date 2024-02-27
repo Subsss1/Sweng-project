@@ -6,38 +6,37 @@ ismachine_protocol.fields.probability = ProtoField.string("ismachine.probability
 cached_result = {}
 
 function ismachine_protocol.dissector(buffer, pinfo, tree)
-  -- Set name in protocol column
-  -- pinfo.cols.protocol = ismachine_protocol.name
-
   -- Filter out
   local packet_type = buffer(12, 2):uint()
   local proto_num = buffer(23, 1):uint()
   local is_ip = packet_type == 2048 or packet_type == 34525
   local is_udp_or_tcp = proto_num == 6 or proto_num == 17
+
   if(not is_ip and not is_udp_or_tcp) then
     return
   end
-  
+
   -- Get packet info
   local ipv = tostring(packet_type == 2048 and 4 or 6)
-  local proto = tostring(proto_num)
-  local src_address = tostring(pinfo.src)
-  local dst_address = tostring(pinfo.dst)
+  local src = tostring(pinfo.src)
+  local dst = tostring(pinfo.dst)
   local src_port = tostring(pinfo.src_port)
   local dst_port = tostring(pinfo.dst_port)
+  local proto = tostring(proto_num)
   local len = tostring(pinfo.len)
-  
-  local args = { ipv, proto, src_address, dst_address, src_port, dst_port, len }
+
+  local args = { ipv, proto, src, dst, src_port, dst_port, len }
   print(dump(args))
 
   -- Get inference result
   local result = cached_result[pinfo.number]
+
   if not result then
     result = infer(args)
     cached_result[pinfo.number] = result
   end
 
-  -- Get fields
+  -- Format fields
   local machine_generated_probability = tonumber(result)
   local generated_by = machine_generated_probability >= 0.5 and "Machine" or "Human"
   local probability = machine_generated_probability >= 0.5 and machine_generated_probability or 1 - machine_generated_probability
@@ -51,7 +50,6 @@ end
 register_postdissector(ismachine_protocol)
 
 -- Helpers
-
 function infer(args)
   local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
   local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
