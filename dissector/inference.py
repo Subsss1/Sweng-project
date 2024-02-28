@@ -1,15 +1,26 @@
-# Script that runs model
 import sys
-import time
-import random
+import ipaddress
+import joblib
 
 # Get arguments
-arguments = sys.argv[1:]
+arguments = sys.argv[1:] # [ number, timestamp, ipv, src, dst, src_port, dst_port, proto, len ]
 
-# Some magical stuff with model (run inference using arguments)
-# time.sleep(1) # Simulate heavy work
-result = random.uniform(0, 1)
+# Format input data
+number = int(arguments[0])
+timestamp = float(arguments[1])
+ipv = int(arguments[2])
+src = int(ipaddress.IPv4Address(arguments[3]))
+dst = int(ipaddress.IPv4Address(arguments[4]))
+src_port = int(arguments[5])
+dst_port = int(arguments[6])
+proto = int(arguments[7])
+length = int(arguments[8])
+
+input_data = [[number, ipv, timestamp, src, dst, src_port, dst_port, length, proto]]
+
+# Run model
+model = joblib.load('model.pkl')
+result = model.predict(input_data)
 
 # Return result
-print(result)
-
+print(result[0])

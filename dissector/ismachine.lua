@@ -9,15 +9,19 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   -- Filter out
   local packet_type = buffer(12, 2):uint()
   local proto_num = buffer(23, 1):uint()
-  local is_ip = packet_type == 2048 or packet_type == 34525
-  local is_udp_or_tcp = proto_num == 6 or proto_num == 17
+  local is_ipv4 = packet_type == 2048
+  local is_ipv6 = packet_type == 34525
+  local is_tcp = proto_num == 6
+  local is_udp = proto_num == 17
 
-  if(not is_ip and not is_udp_or_tcp) then
+  if(not ((is_ipv4 or is_ipv6) and (is_tcp or is_udp))) then
     return
   end
 
   -- Get packet info
-  local ipv = tostring(packet_type == 2048 and 4 or 6)
+  local number = tostring(pinfo.number)
+  local timestamp = tostring(pinfo.rel_ts)
+  local ipv = tostring(is_ipv4 and 4 or 6)
   local src = tostring(pinfo.src)
   local dst = tostring(pinfo.dst)
   local src_port = tostring(pinfo.src_port)
@@ -25,7 +29,7 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   local proto = tostring(proto_num)
   local len = tostring(pinfo.len)
 
-  local args = { ipv, src, dst, src_port, dst_port, proto, len }
+  local args = { number, timestamp, ipv, src, dst, src_port, dst_port, proto, len }
   print(dump(args))
 
   -- Get inference result
@@ -52,7 +56,7 @@ register_postdissector(ismachine_protocol)
 -- Helpers
 function infer(args)
   local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
-  local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
+  local unix_command = "cd ~/.local/lib/wireshark/plugins/ && python inference.py"
   local command = package.config:sub(1,1) == "\\" and windows_command or unix_command
   local command_args = " " .. table.concat(args, " ")
   local handle = io.popen(command .. command_args, "r")
