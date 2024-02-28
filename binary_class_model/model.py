@@ -43,17 +43,18 @@ data = kb['data']
 data.remove(1)
 auth = kb['author']
 
-print("Splitting training and testing data...")
+#print("Splitting training and testing data...")
 training_data, testing_data, training_labels,  testing_labels = train_test_split(data, auth, stratify=auth,
                                                                                 test_size=0.2, random_state=1)
-print(training_data[:9])
+#print(training_data[:9])
 print(testing_data[:9])
-print(training_labels[:9])
-print(testing_labels[:9])
+print(type(testing_data))
+#print(training_labels[:9])
+#print(testing_labels[:9])
 
 gauss = GaussianNB()
 model = gauss.fit(training_data,training_labels)
-test_results = gauss.predict(testing_data)
+test_results = model.predict(testing_data)
 print(test_results)
 joblib.dump(model, 'model.pkl')
 score = accuracy_score(testing_labels,test_results)

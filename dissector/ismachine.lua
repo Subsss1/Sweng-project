@@ -17,15 +17,20 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   end
 
   -- Get packet info
+  local pknum = tostring(pinfo.number)
   local ipv = tostring(packet_type == 2048 and 4 or 6)
+  local time = tostring(pinfo.rel_ts)
   local src = tostring(pinfo.src)
   local dst = tostring(pinfo.dst)
   local src_port = tostring(pinfo.src_port)
   local dst_port = tostring(pinfo.dst_port)
   local proto = tostring(proto_num)
   local len = tostring(pinfo.len)
+  local src_ip_num = tostring(ipv4_to_int(src))
+  local dst_ip_num = tostring(ipv4_to_int(dst))
 
-  local args = { ipv, src, dst, src_port, dst_port, proto, len }
+  --local args = { pknum,ipv,time,src_ip_num,dst_ip_num,src_port,dst_port,len,proto}
+  local args = { 1,2,3,4,5,6,7,8,9}
   print(dump(args))
 
   -- Get inference result
@@ -81,4 +86,12 @@ function dump(o)
   else
      return tostring(o)
   end
+end
+
+ function ipv4_to_int(ip)
+  local num = 0
+  for part in ip:gmatch("%d+") do
+    num = num * 256 + tonumber(part)
+  end
+  return num
 end
