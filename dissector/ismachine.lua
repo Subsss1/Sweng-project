@@ -49,17 +49,36 @@ end
 
 register_postdissector(ismachine_protocol)
 
+-- Requires LuaSocket for HTTP functionality
+local http = require("socket.http")
+local ltn12 = require("ltn12")
+
 -- Helpers
 function infer(args)
-  local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
-  local unix_command = "python3 ~/.local/lib/wireshark/plugins/inference.py"
-  local command = package.config:sub(1,1) == "\\" and windows_command or unix_command
-  local command_args = " " .. table.concat(args, " ")
-  local handle = io.popen(command .. command_args, "r")
-  local output = handle:read("*a")
-  handle:close()
-  return remove_last_line(output)
+  local url = "http://localhost:5000/inference"
+  local request_body = table.concat(args, " ")
+  local response_body = {}
+
+  -- Sending a POST request to the Python inference service
+  local res, code, response_headers = http.request{
+    url = url,
+    method = "POST",
+    headers = {
+      ["Content-Type"] = "application/x-www-form-urlencoded",
+      ["Content-Length"] = tostring(#request_body)
+    },
+    source = ltn12.source.string(request_body),
+    sink = ltn12.sink.table(response_body)
+  }
+
+  if code == 200 then
+    -- Assuming the service returns the inference result as a plain text response
+    return table.concat(response_body)
+  else
+    error("HTTP request failed: " .. tostring(code))
+  end
 end
+
 
 function remove_last_line(str)
   local last_line_index = str:find("\n[^\n]*$")
