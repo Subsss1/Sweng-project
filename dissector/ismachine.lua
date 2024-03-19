@@ -101,3 +101,16 @@ function dump(o)
      return tostring(o)
   end
 end
+
+-- function call_python_script(measurement, field, value)
+--   local script_path = "influxdb_insert.py"
+--   local command = string.format("python %s '%s' '%s' '%f'", script_path, measurement, field, value)
+--   os.execute(command)
+-- end
+
+-- function call_inference()
+--   local handle = io.popen("python inference.py")
+--   local result = handle:read("*a")
+--   handle:close()
+--   return tonumber(result)
+-- end
