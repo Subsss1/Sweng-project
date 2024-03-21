@@ -13,3 +13,26 @@ The availability of appropriate datasets hindered our project in the beginning w
 
 For our demo we were not ready to use a large dataset and ended up using a small self-generated PCAP file instead.
 ________________________________________________________________________________________________________________________________
+Rosemary Doyle
+_________________________________________________________________________________________________________________________________
+
+In the begining of the project, I was assigned to the dissector team. Researching the dissector and it's implementation as well as gaining a good understanding of Lua was a large portion of the first week of work. Wireshark and Lua's own resources provided guidance in how to go about implementing the disector. 
+
+https://www.wireshark.org/docs/wsdg_html_chunked/ChDissectAdd.html
+https://www.wireshark.org/docs/wsdg_html_chunked/wsluarm_modules.html
+https://www.lua.org/pil/contents.html
+
+Finding an appropriate dataset was the biggest challenge we had to overcome in this project, I searched through many databases for appropriate dataset, but the options were extremely limited and often times didn't contain the information we needed and/or contained much information that was irrelevant. The University of New Brunswick had some very promising datasets from the Canadian Institute for Cybersecurity, but they were too specified for our needs, i.e. datasets would contain only a specific type of machine-generated traffic or would focus on a single issue.
+
+https://www.unb.ca/cic/datasets/index.html
+
+KDD Cup 1999 Data also seemed promising, but as the title suggests is rather outdated and introduces the fear that it may be inaccurate too todays standards and therefore essentially useless.
+
+http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html
+
+There were many other databases of datasets searched, all of which had individual reasons for not being used, and many of which I could not confirm to be reliable sources as they had no connections (that I could find) to reputable sources.
+
+I then worked for a short period of time on the influx database, Influx University provided a short (roughly 6-9hr) course on getting started with InfluxDB which was extremely useful.
+
+https://university.influxdata.com/courses/influxdbu-essentials-iox/
+_________________________________________________________________________________________________________________________________
