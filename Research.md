@@ -26,7 +26,7 @@ Finding an appropriate dataset was the biggest challenge we had to overcome in t
 
 https://www.unb.ca/cic/datasets/index.html
 
-KDD Cup 1999 Data also seemed promising, but as the title suggests is rather outdated and introduces the fear that it may be inaccurate too todays standards and therefore essentially useless.
+KDD Cup 1999 Data also seemed promising, but as the title suggests it is rather outdated and introduces the fear that it may be inaccurate for todays standards and therefore essentially useless.
 
 http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html
 
