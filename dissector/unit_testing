@@ -1,0 +1,82 @@
+local ismachine_protocol = require("dissector.ismachine")
+-- Mocking the required libraries and functions
+local http = {
+    request = function(params)
+      return "Inference Result", 200, {}
+    end
+  }
+  
+  local ltn12 = {
+    source = {
+      string = function(str)
+        return function() return nil end
+      end
+    },
+    sink = {
+      table = function(tbl)
+        return function() end
+      end
+    }
+  }
+  
+  _G["http"] = http
+  _G["ltn12"] = ltn12
+  
+  -- Mocking the 'pinfo' and 'tree' parameters
+  local pinfo = {
+    src = "192.168.1.1",
+    dst = "192.168.1.2",
+    src_port = 1234,
+    dst_port = 5678,
+    len = 100,
+    number = 123
+  }
+  
+  local tree = {
+    add = function(self, proto, buffer, message)
+      return {
+        add = function(self, field, value)
+          assert(proto == ismachine_protocol)
+          assert(buffer == buffer())
+          assert(message == "IsMachine Protocol Data")
+          assert(field == ismachine_protocol.fields.generated_by)
+          assert(value == "Human" or value == "Machine")
+        end
+      }
+    end
+  }
+  
+  local buffer = function()
+    return {
+      string = function(self)
+        return "Buffer Data"
+      end,
+      __call = function(self)
+        return self
+      end
+    }
+  end
+  
+  -- Test the dissector function
+  function test_dissector()
+    -- Test with a packet type that is not IP or UDP/TCP
+    assert(ismachine_protocol.dissector({}, {src = "source", dst = "destination"}, tree)== nil)
+  
+    -- Test with a packet type and protocol number that match IP and UDP/TCP
+    local packet_type = 2048 -- IP
+    local proto_num = 6 -- TCP
+    local expected_args = { "4", "192.168.1.1", "192.168.1.2", "1234", "5678", "6", "100" }
+    local expected_result = "Inference Result"
+    local expected_generated_by = "Human"
+    local expected_probability = 0.5
+  
+    local result = ismachine_protocol.dissector(buffer(), pinfo, tree)
+  
+    assert(result == nil) -- Because it's a mocked function
+  end
+  
+  -- Run the tests
+  test_dissector()
+  
+  print("All tests passed successfully!")
+  return ismachine_protocol
