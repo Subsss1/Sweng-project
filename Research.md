@@ -36,3 +36,28 @@ I then worked for a short period of time on the influx database, Influx Universi
 
 https://university.influxdata.com/courses/influxdbu-essentials-iox/
 _________________________________________________________________________________________________________________________________
+Alexander Judge
+_________________________________________________________________________________________________________________________________
+I was assigned to the model team for the project. I had no experience with python nor machiene learning so because of that I had to do a good amount of research before hand. Our group looked into binary classification and sklearn for our model. 
+
+https://scikit-learn.org/stable/
+https://visualstudiomagazine.com/articles/2023/02/21/scikit-decision-tree.aspx
+https://www.learndatasci.com/glossary/binary-classification/
+https://www.youtube.com/watch?v=Rg71lBtEuTc
+
+These are the links that helped me get started with the model. 
+
+After getting progress done on the model, I switched over to docker and github packaging.
+
+I used these videos to get started.
+
+https://www.youtube.com/watch?v=gqseP_wTZsk&t=0s
+https://www.youtube.com/watch?v=gcacQ29AjOo&t=0s
+https://www.youtube.com/watch?v=SnSH8Ht3MIc&t=0s
+
+These helped me get a dockerfile generated and github package, I also used github actions to make a pre release. 
+
+
+
+
+
