@@ -57,6 +57,22 @@ https://www.youtube.com/watch?v=SnSH8Ht3MIc&t=0s
 
 These helped me get a dockerfile generated and github package, I also used github actions to make a pre release. 
 
+---------------------------------------------------------------------------------------------------------------------------------
+Daniel Sorensen
+_________________________________________________________________________________________________________________________________
+For the first few weeks of the project, I researched making a Wireshark dissector and coding a simple prototype as I had very little experience with Wireshark and Lua which is the language we chose to use to program the dissector. I used primarily these websites and videos to guide me in being able to achieve this.
+
+https://www.sewio.net/open-sniffer/develop/how-to-write-wireshark-dissector/
+
+https://www.youtube.com/watch?v=iMacxZQMPXs\
+
+Later on I was put in charge with others to create a Grafana dashboard connected to our time series database in InfluxDB that the dissector could stream results to and that would result in visualisations of the raw data. I studied SQL and Grafana itself as I didn’t have much experience with these. I learned to make SQL queries that can retrieve data and give the user specific information.
+
+https://www.youtube.com/watch?v=h0nxCDiD-zg
+
+https://www.w3schools.com/sql/
+
+Grafana tutorials by Grafana: https://www.youtube.com/watch?v=TQur9GJHIIQ&list=PLDGkOdUX1Ujo27m6qiTPPCpFHVfyKq9jT
 
 
 
