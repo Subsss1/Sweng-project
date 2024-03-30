@@ -7,30 +7,30 @@ import csv
 
 
 def load_data():
-    with open(r'human_update_EXAMPLE.csv') as csv_file:
+    with open(r'output.csv') as csv_file:
         data_reader = csv.reader(csv_file)
-        properties = next(data_reader)[:9]
-        data = [1]
+        properties = next(data_reader)[:8]
+        data = []
         author = []
 
         #with open("regex.txt","r") as f:
         #    regexes = [line.split("~") for line in f.read().split("\n")]
         for row in data_reader:
-            row[1] = 6
-            if row[8] == 'TCP':
-                row[8] = 6
-            elif row[8] == 'UDP':
-                row[8] = 17
-            else:
-                row[8] = 252
+        #    row[1] = 6
+        #    if row[8] == 'TCP':
+        #        row[8] = 6
+        #    elif row[8] == 'UDP':
+        #        row[8] = 17
+        #    else:
+        #        row[8] = 252
 
             #for regex, category in regexes:
             #    if re.match(rf"{regex}", row[6]):
             #        row[6] = category
             #        break
 
-            label = row[9] #index to whichever column indicates machine/human generated
-            stats = row[:9]
+            label = row[8] #index to whichever column indicates machine/human generated
+            stats = row[:8]
             data.append([float(num) for num in stats])
             author.append(int(label))
 
@@ -40,7 +40,6 @@ def load_data():
 kb = load_data()
 prop = kb['properties']
 data = kb['data']
-data.remove(1)
 auth = kb['author']
 
 print("Splitting training and testing data...")
