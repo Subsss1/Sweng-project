@@ -4,9 +4,7 @@ import ipaddress
 import csv
 
 
-# ---
 # Convert packets from capture to a list of dictionaries
-# ---
 def read_packets(capture: pyshark.FileCapture):
   packets = []
 
@@ -31,9 +29,7 @@ def read_packets(capture: pyshark.FileCapture):
   return packets
 
 
-# ---
 # Add fields from labels to packets based on packet number
-# ---
 def add_labels(packets: list, labels: list):
   labeled_packets = []
   packet_map = {packet['number']: packet for packet in packets}
@@ -48,9 +44,7 @@ def add_labels(packets: list, labels: list):
   return labeled_packets
 
 
-# ---
 # Preprocess packets for model training
-# ---
 def preprocess_packets(packets: list):
   preprocessed_packets = []
   global_flow = {}
@@ -104,10 +98,8 @@ def preprocess_packets(packets: list):
   return preprocessed_packets
 
 
-# ---
 # Main function
-# ---
-def main(capture_path, labels_path, output_path):
+def main(capture_path: str, labels_path: str, output_path: str):
   # Read packets
   with open(capture_path, 'r') as _:
     capture = pyshark.FileCapture(capture_path, display_filter='tcp or udp')
