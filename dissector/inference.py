@@ -1,23 +1,36 @@
 import sys
-import ipaddress
+import pandas as pd
 import joblib
 
 # Get arguments
-arguments = sys.argv[1:] # [ src_port, dst_port, proto, delta_time, len, avg_len ]
+# [ source_port, destination_port, protocol, length, length_deviation, delta_time, flow_average_length, flow_length_deviation, flow_delta_time ]
+arguments = sys.argv[1:]
 
-# Format input data
-src_port = int(arguments[0])
-dst_port = int(arguments[1])
-proto = int(arguments[2])
-delta_time = float(arguments[3])
-length = int(arguments[4])
-avg_len = float(arguments[5])
+if len(arguments) != 9:
+  # print("Usage: python inference.py source_port destination_port protocol length length_deviation delta_time flow_average_length flow_length_deviation flow_delta_time")
+  print('-1')
+  sys.exit(1)
 
-input_data = [[ src_port, dst_port, proto, delta_time, length, avg_len ]]
+input_data = {
+  'source_port':            int(arguments[0]),
+  'destination_port':       int(arguments[1]),
+  'protocol':               int(arguments[2]),
+  'length':                 int(arguments[3]),
+  'length_deviation':       float(arguments[4]),
+  'delta_time':             float(arguments[5]),
+  'flow_average_length':    float(arguments[6]),
+  'flow_length_deviation':  float(arguments[7]),
+  'flow_delta_time':        float(arguments[8]),
+}
+
+input_data = pd.DataFrame([input_data])
 
 # Run model
 model = joblib.load('model.pkl')
-result = model.predict(input_data)
+
+# Predict
+# list of probabilities for each packet [[macnine_probability, human_probability]]
+result = model.predict_proba(input_data)
 
 # Return result
-print(result[0])
+print(result[0][0])

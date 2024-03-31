@@ -17,10 +17,6 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   local is_tcp = proto_num == 6
   local is_udp = proto_num == 17
 
-  -- if(not ((is_ipv4 or is_ipv6) and (is_tcp or is_udp))) then
-  --   return
-  -- end
-
   if(not (is_ipv4 and (is_tcp or is_udp))) then
     return
   end
