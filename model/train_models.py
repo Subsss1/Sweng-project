@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import joblib
@@ -24,11 +24,7 @@ def preprocess_data(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
 
   # Split the data into features and target variable
   X = data.drop('human', axis=1)
-  Y = data['human']
-
-  # Normalize features and encode target variable
-  X = MinMaxScaler().fit_transform(X)
-  Y = LabelEncoder().fit_transform(Y)
+  Y = LabelEncoder().fit_transform(data['human'])
 
   # Split the data into training and test sets
   X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=seed)
