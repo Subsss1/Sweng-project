@@ -83,7 +83,7 @@ def train_DTC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
 def train_RFC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   X_train, X_test, Y_train, Y_test = preprocess_data(data, test_size, seed)
 
-  model = RandomForestClassifier(n_estimators=10)
+  model = RandomForestClassifier(n_estimators=16, max_depth=20, random_state=seed)
   model.fit(X_train, Y_train)
 
   Y_pred = model.predict(X_test)
@@ -96,7 +96,12 @@ def train_RFC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
 # Main function
 def main(datasets: list[str]):
   data = load_data(datasets)
-  models = { 'LR': train_LR, 'KNN': train_KNN, 'DTC': train_DTC, 'RFC': train_RFC }
+  models = { 
+    'LR': train_LR,
+    'KNN': train_KNN,
+    'DTC': train_DTC,
+    'RFC': train_RFC
+  }
 
   print(f"Loaded {len(data)} samples from {len(datasets)} datasets")
 
