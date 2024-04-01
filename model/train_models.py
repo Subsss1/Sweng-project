@@ -93,9 +93,17 @@ def train_RFC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   return model
 
 
-# Main function
-def main(datasets: list[str]):
+if __name__ == '__main__':
+  datasets = [
+    './datasets/1.csv',
+    './datasets/2.csv',
+    './datasets/3.csv',
+    './datasets/4.csv',
+    './datasets/5.csv'
+  ]
+
   data = load_data(datasets)
+
   models = { 
     'LR': train_LR,
     'KNN': train_KNN,
@@ -109,13 +117,3 @@ def main(datasets: list[str]):
     print(f"\nTraining {model_name} model...")
     model = train_model(data)
     dump_model(model, f'./dumps/{model_name}_model.pkl')
-
-
-if __name__ == '__main__':
-  main([
-    './datasets/1.csv',
-    './datasets/2.csv',
-    './datasets/3.csv',
-    './datasets/4.csv',
-    './datasets/5.csv'
-  ])

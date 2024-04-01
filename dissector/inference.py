@@ -25,10 +25,10 @@ input_data = {
 
 input_data = pd.DataFrame([input_data])
 
-# Run model
+# Load model
 model = joblib.load('model.pkl')
 
-# Predict
+# Get prediction
 # list of probabilities for each packet [[macnine_probability, human_probability]]
 result = model.predict_proba(input_data)
 

@@ -98,8 +98,15 @@ def preprocess_packets(packets: list):
   return preprocessed_packets
 
 
-# Main function
-def main(capture_path: str, labels_path: str, output_path: str):
+if __name__ == "__main__":
+  if len(sys.argv) != 4:
+    print('Usage: python capture2dataset.py <capture_path> <labels_path> <output_path>')
+    sys.exit(1)
+
+  capture_path = sys.argv[1]
+  labels_path = sys.argv[2]
+  output_path = sys.argv[3]
+
   # Read packets
   with open(capture_path, 'r') as _:
     capture = pyshark.FileCapture(capture_path, display_filter='tcp or udp')
@@ -120,15 +127,3 @@ def main(capture_path: str, labels_path: str, output_path: str):
       writer = csv.DictWriter(output_file, fieldnames=packets[0].keys())
       writer.writeheader()
       writer.writerows(packets)
-
-
-if __name__ == "__main__":
-  if len(sys.argv) != 4:
-    print('Usage: python capture2dataset.py <capture_path> <labels_path> <output_path>')
-    sys.exit(1)
-
-  capture_path = sys.argv[1]
-  labels_path = sys.argv[2]
-  output_path = sys.argv[3]
-
-  main(capture_path, labels_path, output_path)

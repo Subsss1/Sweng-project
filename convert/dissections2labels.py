@@ -22,8 +22,14 @@ def get_labels(dissections: list[dict]):
   return labels
 
 
-# Main function
-def main(dissections_path: str, output_path: str):
+if __name__ == "__main__":
+  if len(sys.argv) != 3:
+    print('Usage: python dissections2labels.py <dissections_path> <output_path>')
+    sys.exit(1)
+
+  dissections_path = sys.argv[1]
+  output_path = sys.argv[2]
+
   labels = []
 
   # Get labels
@@ -38,14 +44,3 @@ def main(dissections_path: str, output_path: str):
       writer = csv.DictWriter(output_file, fieldnames=labels[0].keys())
       writer.writeheader()
       writer.writerows(labels)
-
-
-if __name__ == "__main__":
-  if len(sys.argv) != 3:
-    print('Usage: python dissections2labels.py <dissections_path> <output_path>')
-    sys.exit(1)
-
-  dissections_path = sys.argv[1]
-  output_path = sys.argv[2]
-
-  main(dissections_path, output_path)
