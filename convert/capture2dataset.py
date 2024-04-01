@@ -1,3 +1,8 @@
+'''
+Convert a traffic capture and its labels to a dataset for model training.
+Usage: python capture2dataset.py <capture_path> <labels_path> <output_path>
+'''
+
 import sys
 import pyshark
 import ipaddress

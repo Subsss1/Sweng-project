@@ -15,7 +15,6 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   local is_tcp = protocol_number == 6
   local is_udp = protocol_number == 17
 
-  -- Filter out
   if(not (is_ipv4 and (is_tcp or is_udp))) then
     return
   end
@@ -27,20 +26,21 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   local protocol          = tonumber(protocol_number)
   local length            = tonumber(pinfo.len)
   local timestamp         = tonumber(pinfo.rel_ts)
-  
+
   if results[pinfo.number] == nil then
     local features = get_features(source, destination, source_port, destination_port, protocol, length, timestamp)
-
-    print(table.concat(features, ", "))
     results[pinfo.number] = infer(features)
   end
 
-  -- Format fields
-  local machine_generated_probability = tonumber(results[pinfo.number])
-  local generated_by = machine_generated_probability >= 0.5 and "Machine" or "Human"
-  local probability = machine_generated_probability >= 0.5 and machine_generated_probability or 1 - machine_generated_probability
+  local is_machine_probability = tonumber(results[pinfo.number])
 
-  -- Add subtree
+  if is_machine_probability == nil or is_machine_probability < 0 then
+    return
+  end
+
+  local generated_by = is_machine_probability >= 0.5 and "Machine" or "Human"
+  local probability = is_machine_probability >= 0.5 and is_machine_probability or 1 - is_machine_probability
+
   local subtree = tree:add(ismachine_protocol, buffer(), "IsMachine Protocol Data")
   subtree:add(ismachine_protocol.fields.generated_by, generated_by)
   subtree:add(ismachine_protocol.fields.probability, probability)

@@ -1,7 +1,10 @@
-"""
+'''
+Convert dissections in CSV format to labels.
+Usage: python dissections2labels.py <dissections_path> <output_path>
+
 Based on:
 @author: liutao from https://www.linkedin.com/pulse/build-machine-learning-model-network-flow-tao-liu
-"""
+'''
 
 import sys
 import csv
