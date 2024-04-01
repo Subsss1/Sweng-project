@@ -74,6 +74,22 @@ https://www.w3schools.com/sql/
 
 Grafana tutorials by Grafana: https://www.youtube.com/watch?v=TQur9GJHIIQ&list=PLDGkOdUX1Ujo27m6qiTPPCpFHVfyKq9jT
 
+________________________________________________________________________________________________________________________________
+Colm Buttimer
+_________________________________________________________________________________________________________________________________
 
+As team leader of the group, I spent the first few weeks of the project reasearching the main components of the project. With request from the client I created a more detailed requirements document. This required more detailed research into information management topics.
+
+As a group we quickly ran into a road block of finding a premade opensource dataset that was usuable for our needs. I resulted to researching ways to capture, refine and lable my own dataset so we could proceed with training the model. Using inspiration from the below websites I wrote some python scripts to achieve this.
+
+https://www.linkedin.com/pulse/build-machine-learning-model-network-flow-tao-liu
+
+https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/
+
+Later on in the project, we had to create, setup and connect a InfluxDB cloud 2.0 database to a Graffana dashboard. Using multiple tutorials I achieved the intial connections with test data.
+
+https://grafana.com/tutorials/
+
+https://docs.influxdata.com/influxdb/v2/get-started/
 
 
