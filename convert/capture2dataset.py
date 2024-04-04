@@ -1,5 +1,5 @@
 '''
-Convert a traffic capture and its labels to a dataset for model training.
+Convert a traffic capture and its labels to a dataset for model training
 Usage: python capture2dataset.py <capture_path> <labels_path> <output_path>
 '''
 
@@ -32,21 +32,6 @@ def read_packets(capture: pyshark.FileCapture):
     })
 
   return packets
-
-
-# Add fields from labels to packets based on packet number
-def add_labels(packets: list, labels: list):
-  labeled_packets = []
-  packet_map = {packet['number']: packet for packet in packets}
-
-  for label in labels:
-    number = label['number']
-
-    if number in packet_map:
-      packet = packet_map[number]
-      labeled_packets.append({**packet, **label})
-
-  return labeled_packets
 
 
 # Preprocess packets for model training
@@ -101,6 +86,21 @@ def preprocess_packets(packets: list):
     preprocessed_packets.append(preprocessed_packet)
 
   return preprocessed_packets
+
+
+# Add fields from labels to packets based on packet number
+def add_labels(packets: list, labels: list):
+  labeled_packets = []
+  packet_map = {packet['number']: packet for packet in packets}
+
+  for label in labels:
+    number = label['number']
+
+    if number in packet_map:
+      packet = packet_map[number]
+      labeled_packets.append({**packet, **label})
+
+  return labeled_packets
 
 
 if __name__ == "__main__":

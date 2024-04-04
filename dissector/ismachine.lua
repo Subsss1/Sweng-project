@@ -19,15 +19,15 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
     return
   end
 
-  local source            = tostring(pinfo.src)
-  local destination       = tostring(pinfo.dst)
-  local source_port       = tonumber(pinfo.src_port)
-  local destination_port  = tonumber(pinfo.dst_port)
-  local protocol          = tonumber(protocol_number)
-  local length            = tonumber(pinfo.len)
-  local timestamp         = tonumber(pinfo.rel_ts)
-
   if results[pinfo.number] == nil then
+    local source            = tostring(pinfo.src)
+    local destination       = tostring(pinfo.dst)
+    local source_port       = tonumber(pinfo.src_port)
+    local destination_port  = tonumber(pinfo.dst_port)
+    local protocol          = tonumber(protocol_number)
+    local length            = tonumber(pinfo.len)
+    local timestamp         = tonumber(pinfo.rel_ts)
+
     local features = get_features(source, destination, source_port, destination_port, protocol, length, timestamp)
     results[pinfo.number] = infer(features)
   end
@@ -131,5 +131,4 @@ function remove_last_line(str)
 end
 
 register_postdissector(ismachine_protocol)
-
 return ismachine_protocol
