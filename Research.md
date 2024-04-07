@@ -47,6 +47,8 @@ https://www.youtube.com/watch?v=Rg71lBtEuTc
 
 These are the links that helped me get started with the model. 
 
+I was also responsible for completing the Midway Project Report.
+
 After getting progress done on the model, I switched over to docker and github packaging.
 
 I used these videos to get started.
