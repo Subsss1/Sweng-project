@@ -95,3 +95,20 @@ https://grafana.com/tutorials/
 https://docs.influxdata.com/influxdb/v2/get-started/
 
 
+________________________________________________________________________________________________________________________________
+Fifi Onafuwa
+______________________________________________________________________________________________________________________________
+I was mainly on documentation and sprint planning/ organisation for this project but it was still important for me to understand the components we would be working with and the clients at the beginning heavily advised us to look into defining human vs bot traffic so I did some research and this link was really helpful to me in explaining the difference.
+
+https://www.arkoselabs.com/blog/blog-how-to-distinguish-bot-vs-human-traffic/
+
+Our project required some machine learning so I also looked into machine learning fundamentals on youtube and read through some articles on neural networks for better understanding.
+
+https://news.mit.edu/2017/explained-neural-networks-deep-learning-0414
+https://www.youtube.com/watch?v=aircAruvnKk
+
+I had experience with wireshark from Second year but had to refresh my understanding so I watched this series on packet analysing using wireshark and it was pretty helpful.
+
+https://www.youtube.com/watch?v=uGysc4upuX0
+Later on in the project I was on the Dashboard team so I had a look at the InfluxDB and Grafana Documentation already listed above.
+
