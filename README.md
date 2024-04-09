@@ -1,7 +1,6 @@
 # Wireshark dissector that classifies network traffic as human or machine generated
 
-> Software Engineering Project 2024 - Group 11
->
+> Software Engineering Project 2024 - Group 11 \
 > Client: Pico
 
 ## Project description
