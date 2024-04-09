@@ -1,32 +1,42 @@
-Software Engineering Project 2024
-Group 11
+# Wireshark dissector that classifies network traffic as human or machine generated
 
-Client: Pico
+> Software Engineering Project 2024 - Group 11
+>
+> Client: Pico
 
-Project Description:
-The project aims to develop a Wireshark dissector capable of classifying network traffic as either human-generated or machine-generated. 
-This involves collecting a dataset of network traffic examples, extracting relevant features and training machine learning models. 
-The dissector will then utilise these models to classify captured packets or flows in real-time, displaying the results within Wireshark's interface. 
+## Project description
+
+The project aims to develop a Wireshark dissector capable of classifying network traffic as either human-generated or machine-generated.
+This involves collecting a dataset of network traffic examples, extracting relevant features and training machine learning models.
+The dissector will then utilise these models to classify captured packets or flows in real-time, displaying the results within Wireshark's interface.
 The end goal is to enhance network analysis by distinguishing between human and automated traffic patterns.
 
-Members:
-Colm Buttimer,
-Fifi Onafuwa,
-Rhys Mac Giollabhuidhe,
-Xingqiao Xu,
-Yuheng Ye,
-Rosemary Doyle,
-Daniel Sorensen,
-Alexander Judge,
-Jesse Chambers,
-Eoin Bande,
-Andri Yupyk 
+## Project structure
 
-Method to use dissector:
-1.Clone the library and select the latest master branch.
-2.Open the ismachine.lua file in the dissector folder. (If you're using a mac, skip this step.)
-Check whether the Windows path is the same as the plugin folder in the local wireshark installation directory. 
-If inconsistent, change Windows path to the plugin folder in the local wireshark installation folder.
-3.Copy ismachine.lua and inference.py and model.pkl in the model folder. (The connection of the model is not yet complete, but model.pkl will be needed in the future.)
-Put them in the plugins folder under the wireshark installation directory.
-4.Open an arbitrary.pcapng file and you should be able to find that the plugin is already running.
+- [./Research.md](./Research.md) - Research during project development
+- [./dissector](./dissector) - Wireshark dissector
+  - [/ismachine.lua](./dissector/ismachine.lua) - Wireshark dissector plugin
+  - [/server](./dissector/server) - Model server with which the dissector communicates
+- [./model](./model) - Code and data used for model training
+  - [/dumps](./model/convert) - Model dumps
+  - [/datasets](./model/datasets) - Datasets used for model training
+  - [/captures](./model/captures) - Traffic captures and corresponding labels
+  - [/convert](./model/convert) - Scripts for labeling and converting traffic captures to datasets
+- [./draft](./draft) - Drafts accumulated during the project development
+
+<!-- !TODO -->
+<!-- - [./Setup.md](./Setup.md) - Project setup guide -->
+
+## Members
+
+- Colm Buttimer
+- Fifi Onafuwa
+- Rhys Mac Giollabhuidhe
+- Xingqiao Xu
+- Yuheng Ye
+- Rosemary Doyle
+- Daniel Sorensen
+- Alexander Judge
+- Jesse Chambers
+- Eoin Bande
+- Andrii Yupyk

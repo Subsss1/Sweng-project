@@ -39,8 +39,8 @@ def run_model(model, parameters: dict):
 
   return result[0][0]
 
-# Init server
-def init_server(model_path: str, port: int):
+# Run server
+def run_server(model_path: str, port: int):
   app = Flask(__name__)
   model = joblib.load(model_path)
 
@@ -77,4 +77,4 @@ if __name__ == '__main__':
   model_path = sys.argv[1]
   port = sys.argv[2]
 
-  init_server(model_path, port)
+  run_server(model_path, port)
