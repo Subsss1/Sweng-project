@@ -8,7 +8,6 @@ flows = {}
 results = {}
 
 function ismachine_protocol.dissector(buffer, pinfo, tree)
-  local number = pinfo.number
   local packet_type = buffer(12, 2):uint()
   local protocol_number = buffer(23, 1):uint()
   local is_ipv4 = packet_type == 2048
@@ -20,7 +19,7 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
     return
   end
 
-  if results[number] == nil then
+  if results[pinfo.number] == nil then
     local source            = tostring(pinfo.src)
     local destination       = tostring(pinfo.dst)
     local source_port       = tonumber(pinfo.src_port)
@@ -29,11 +28,11 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
     local length            = tonumber(pinfo.len)
     local timestamp         = tonumber(pinfo.rel_ts)
 
-    local params = get_params(number, source, destination, source_port, destination_port, protocol, length, timestamp)
-    results[number] = infer(params)
+    local features = get_features(source, destination, source_port, destination_port, protocol, length, timestamp)
+    results[pinfo.number] = infer(features)
   end
 
-  local is_machine_probability = tonumber(results[number])
+  local is_machine_probability = tonumber(results[pinfo.number])
 
   if is_machine_probability == nil or is_machine_probability < 0 then
     return
@@ -47,8 +46,8 @@ function ismachine_protocol.dissector(buffer, pinfo, tree)
   subtree:add(ismachine_protocol.fields.probability, probability)
 end
 
-function get_params(number, source, destination, source_port, destination_port, protocol, length, timestamp)
-  local params = {
+function get_features(source, destination, source_port, destination_port, protocol, length, timestamp)
+  local features = {
     source_port           = source_port,
     destination_port      = destination_port,
     protocol              = protocol,
@@ -61,8 +60,8 @@ function get_params(number, source, destination, source_port, destination_port, 
   }
 
   if global_flow.duration > 0 then
-    params.length_deviation = math.abs(length - global_flow.average_length)
-    params.delta_time = math.abs(timestamp - global_flow.last_timestamp)
+    features.length_deviation = math.abs(length - global_flow.average_length)
+    features.delta_time = math.abs(timestamp - global_flow.last_timestamp)
   
     global_flow = {
       duration       = global_flow.duration + 1,
@@ -80,14 +79,14 @@ function get_params(number, source, destination, source_port, destination_port, 
   local flow = source .. "," .. source_port .. "," .. destination .. "," .. destination_port .. "," .. protocol
 
   if flows[flow] ~= nil then
-    params.flow_delta_time = math.abs(timestamp - flows[flow].last_timestamp)
-    params.flow_length_deviation = math.abs(length - flows[flow].average_length)
-    params.flow_average_length = (flows[flow].average_length * flows[flow].duration + length) / (flows[flow].duration + 1)
+    features.flow_delta_time = math.abs(timestamp - flows[flow].last_timestamp)
+    features.flow_length_deviation = math.abs(length - flows[flow].average_length)
+    features.flow_average_length = (flows[flow].average_length * flows[flow].duration + length) / (flows[flow].duration + 1)
 
     flows[flow] = {
       duration       = flows[flow].duration + 1,
       last_timestamp = timestamp,
-      average_length = params.flow_average_length,
+      average_length = features.flow_average_length,
     }
   else
     flows[flow] = {
@@ -97,43 +96,38 @@ function get_params(number, source, destination, source_port, destination_port, 
     }
   end
 
-  return {
-    number                = tostring(number),
-    flow                  = tostring(flow),
-    source_port           = tostring(params.source_port),
-    destination_port      = tostring(params.destination_port),
-    protocol              = tostring(params.protocol),
-    length                = tostring(params.length),
-    length_deviation      = string.format("%.8f", params.length_deviation),
-    delta_time            = string.format("%.8f", params.delta_time),
-    flow_average_length   = string.format("%.8f", params.flow_average_length),
-    flow_length_deviation = string.format("%.8f", params.flow_length_deviation),
-    flow_delta_time       = string.format("%.8f", params.flow_delta_time),
+  return { 
+    tostring(features.source_port),
+    tostring(features.destination_port),
+    tostring(features.protocol),
+    tostring(features.length),
+    string.format("%.8f", features.length_deviation),
+    string.format("%.8f", features.delta_time),
+    string.format("%.8f", features.flow_average_length),
+    string.format("%.8f", features.flow_length_deviation),
+    string.format("%.8f", features.flow_delta_time),
   }
 end
 
-function infer(params)
-  local url = 'http://localhost:13131/infer'
-  local query_params = string.format(
-    '?number=%s&flow=%s&source_port=%s&destination_port=%s&protocol=%s&length=%s&length_deviation=%s&delta_time=%s&flow_average_length=%s&flow_length_deviation=%s&flow_delta_time=%s',
-    params.number,
-    params.flow,
-    params.source_port,
-    params.destination_port,
-    params.protocol,
-    params.length,
-    params.length_deviation,
-    params.delta_time,
-    params.flow_average_length,
-    params.flow_length_deviation,
-    params.flow_delta_time
-  )
-
-  local handle = io.popen("curl -s " .. '"' .. url .. query_params .. '"')
-  local result = handle:read("*a")
+function infer(args)
+  local windows_command = 'cd "C:/Program Files/Wireshark/plugins/" && python inference.py'
+  local unix_command = 'cd ~/.local/lib/wireshark/plugins/ && python inference.py'
+  local command = (package.config:sub(1,1) == '\\' and windows_command or unix_command) .. ' ' .. table.concat(args, " ")
+  local handle = io.popen(command, "r")
+  local output = handle:read("*a")
   handle:close()
 
-  return result
+  return remove_last_line(output)
+end
+
+function remove_last_line(str)
+  local last_line_index = str:find("\n[^\n]*$")
+
+  if last_line_index then
+    return str:sub(1, last_line_index - 1)
+  else
+    return ""
+  end
 end
 
 register_postdissector(ismachine_protocol)
