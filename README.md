@@ -12,6 +12,7 @@ The end goal is to enhance network analysis by distinguishing between human and 
 
 ## Project structure
 
+- [./Setup.md](./Setup.md) - Project setup guide
 - [./Research.md](./Research.md) - Research during project development
 - [./dissector](./dissector) - Wireshark dissector
   - [/ismachine.lua](./dissector/ismachine.lua) - Wireshark dissector plugin
@@ -22,9 +23,6 @@ The end goal is to enhance network analysis by distinguishing between human and 
   - [/captures](./model/captures) - Traffic captures and corresponding labels
   - [/convert](./model/convert) - Scripts for labeling and converting traffic captures to datasets
 - [./draft](./draft) - Drafts accumulated during the project development
-
-<!-- !TODO -->
-<!-- - [./Setup.md](./Setup.md) - Project setup guide -->
 
 ## Members
 
