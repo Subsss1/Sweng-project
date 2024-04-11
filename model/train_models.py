@@ -45,9 +45,7 @@ def train_LR(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   model = LogisticRegression(max_iter=10000)
   model.fit(X_train, Y_train)
 
-  Y_pred = model.predict(X_test)
-  accuracy = accuracy_score(Y_test, Y_pred)
-  print(f"Accuracy on test set: {accuracy}")
+  test_accuracy(model, X_test, Y_test)
 
   return model
 
@@ -58,9 +56,7 @@ def train_KNN(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   model = KNeighborsClassifier()
   model.fit(X_train, Y_train)
 
-  Y_pred = model.predict(X_test)
-  accuracy = accuracy_score(Y_test, Y_pred)
-  print(f"Accuracy on test set: {accuracy}")
+  test_accuracy(model, X_test, Y_test)
 
   return model
 
@@ -72,9 +68,7 @@ def train_DTC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   model = DecisionTreeClassifier()
   model.fit(X_train, Y_train)
 
-  Y_pred = model.predict(X_test)
-  accuracy = accuracy_score(Y_test, Y_pred)
-  print(f"Accuracy on test set: {accuracy}")
+  test_accuracy(model, X_test, Y_test)
 
   return model
 
@@ -86,12 +80,28 @@ def train_RFC(data: pd.DataFrame, test_size: float = 0.2, seed: int = 42):
   model = RandomForestClassifier(n_estimators=16, max_depth=20, random_state=seed)
   model.fit(X_train, Y_train)
 
-  Y_pred = model.predict(X_test)
-  accuracy = accuracy_score(Y_test, Y_pred)
-  print(f"Accuracy on test set: {accuracy}")
+  test_accuracy(model, X_test, Y_test)
 
   return model
 
+
+def test_accuracy(model, X, Y):
+  Y_pred = model.predict(X)
+  accuracy = accuracy_score(Y, Y_pred)
+  print(f"Accuracy on test set: {accuracy}")
+
+  X_machine = X[Y == 0]
+  Y_machine = Y[Y == 0]
+  X_human = X[Y == 1]
+  Y_human = Y[Y == 1]
+
+  Y_pred_machine = model.predict(X_machine)
+  accuracy_machine = accuracy_score(Y_machine, Y_pred_machine)
+  Y_pred_human = model.predict(X_human)
+  accuracy_human = accuracy_score(Y_human, Y_pred_human)
+
+  print(f"Accuracy on test set with only machine generated traffic: {accuracy_machine} ({len(X_machine)} samples)")
+  print(f"Accuracy on test set with only human generated traffic: {accuracy_human} ({len(X_human)} samples)")
 
 if __name__ == '__main__':
   datasets = [
