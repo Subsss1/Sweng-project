@@ -1,2 +1,2 @@
 run:
-	python ./model_server.py ../../model/dumps/RFC_model.pkl 13131
+	python ./model_server.py ../../model/dump/RFC_model.pkl 13131
